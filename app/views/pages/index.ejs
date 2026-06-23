@@ -1,34 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista 1 exemplo 03</title>
+
+    <title>Lista 1 Exercício 3</title>
+
+    <style>
+
+        .erro{
+            border: 2px solid red;
+        }
+
+        span{
+            color: red;
+        }
+
+    </style>
+
 </head>
 <body>
- 
-    <h1>Classificação de Salario</h1>
-   
-    <form action="/sal" method="post">
-        <label for="sal">Digite o seu sal:</label> <br>
-        <input type="text" name="sal" id="sal" value="<%= valores.sal %>"> <br>
-        <button type="submit">classificar</button>
-     </form>
- 
-    <%
-     if(resultado){
-        // com dados de retorno
-        %>
-        <h2>Categoria: <%= resultado.sal %></h2>
-        <h2>Percentual: <%= resultado.percentual %></h2>
-        <h2>Aumento: <%= resultado.aumento %></h2>
-        <h2>Novo Salario: <%= resultado.novoSalario %></h2>
-        <%
-     }else{
-        //sem dados de retorno
-        %>
-            <h2>Não temos retorno</h2>
-        <%
-     }
-    %>
- 
+
+<%
+
+    let erroValidacao = { salario: "" };
+
+    let msgErro = { salario: "" };
+
+    if(erros){
+
+        erros.errors.forEach(function(erro){
+
+            if(erro.path == "salario"){
+
+                erroValidacao.salario = "erro";
+
+                msgErro.salario = erro.msg;
+
+            }
+
+        });
+
+    }
+
+%>
+
+<h1>Reajuste Salarial</h1>
+
+<form action="/classificar" method="POST">
+
+    <label for="salario">
+        Digite o salário:
+    </label>
+
+    <br><br>
+
+    <input
+        type="number"
+        name="salario"
+        id="salario"
+        step="0.01"
+        value="<%= valores.salario %>"
+        class="<%= erroValidacao.salario %>"
+    >
+
+    <span><%= msgErro.salario %></span>
+
+    <br><br>
+
+    <button type="submit">
+        Calcular Reajuste
+    </button>
+
+</form>
+
+<% if(resultado != null){ %>
+
+    <hr>
+
+    <h2>Resultado</h2>
+
+    <p>
+        <strong>Salário antes do reajuste:</strong>
+        R$ <%= resultado.salario %>
+    </p>
+
+    <p>
+        <strong>Percentual aplicado:</strong>
+        <%= resultado.percentual %>%
+    </p>
+
+    <p>
+        <strong>Valor do aumento:</strong>
+        R$ <%= resultado.aumento %>
+    </p>
+
+    <p>
+        <strong>Novo salário:</strong>
+        R$ <%= resultado.novoSalario %>
+    </p>
+
+<% } else { %>
+
+    <hr>
+
+    <h2>Nenhum cálculo realizado.</h2>
+
+<% } %>
+
+</body>
+</html>
